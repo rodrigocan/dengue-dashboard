@@ -19,16 +19,27 @@ st.header('Séries temporais de casos notificados')
 
 st.subheader('Brasil')
 
+total_casos_ano_br = data.groupby(['ano']).num_casos.sum().reset_index()
+st.line_chart(total_casos_ano_br, x = 'ano', y = 'num_casos')
+
 st.subheader('Por estado')
 estados = np.sort(data.estado.unique())
 
 estado = st.selectbox('Selecione um estado', estados)
 
 data_estado = data[data['estado'] == estado]
-total_casos_ano = data_estado.groupby(['ano']).num_casos.sum().reset_index()
+total_casos_ano_est = data_estado.groupby(['ano']).num_casos.sum().reset_index()
 
 st.write('Você selecionou:', estado)
-st.line_chart(total_casos_ano, x = 'ano', y = 'num_casos')
-total_casos_ano
+st.line_chart(total_casos_ano_est, x = 'ano', y = 'num_casos')
 
 st.subheader('Por município')
+
+estado_mun = st.selectbox('Selecione o estado', estados)
+
+municipios = np.sort(data[data['estado'] == estado_mun].municipio.unique())
+municipio = st.selectbox('Selecione o município', municipios)
+
+data_municipio = data[data['municipio'] == municipio]
+total_casos_ano_mun = data_municipio.groupby(['ano']).num_casos.sum().reset_index()
+st.line_chart(total_casos_ano_mun, x = 'ano', y = 'num_casos')
